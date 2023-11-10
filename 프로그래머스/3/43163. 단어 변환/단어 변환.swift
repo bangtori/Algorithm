@@ -2,26 +2,29 @@ import Foundation
 
 func solution(_ begin:String, _ target:String, _ words:[String]) -> Int {
     var result = 0
-    func bfs(currentWord: String, count: Int, visit: [Bool]) {
+    
+    func bfs(currentWord: String, visit: [Bool] ,count: Int) {
         if currentWord == target {
-            result = result == 0 || result > count ? count : result
+            if result == 0 || result > count {
+                result = count
+            }
         }
-
         for (i, word) in words.enumerated() {
-            if visit[i] == false && check(currentWord, word) {
+            if visit[i] == false && check(str1: word, str2: currentWord) {
                 var newVisit = visit
                 newVisit[i] = true
-                bfs(currentWord: word, count: count + 1, visit: newVisit)
+                bfs(currentWord: word, visit: newVisit, count: count + 1)
             }
         }
     }
-    bfs(currentWord: begin, count: 0, visit: Array(repeating: false, count: words.count))
+    
+    bfs(currentWord: begin, visit: Array(repeating: false, count: words.count), count: 0)
     return result
 }
 
-func check(_ str1: String, _ str2: String) -> Bool {
-    let arr1 = str1.map{ $0 }
-    let arr2 = str2.map{ $0 }
+func check(str1: String, str2: String) -> Bool {
+    var arr1 = str1.map{ $0 }
+    var arr2 = str2.map{ $0 }
     var count = 0
     for i in 0..<arr1.count {
         if arr1[i] != arr2[i] { count += 1 }
