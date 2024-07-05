@@ -1,38 +1,35 @@
-let input = readLine()!.split(separator: " ").map { String($0) }
-let n = Int(input[0])!
-let nArr = Array(input[0]).map{Int(String($0))!}
+let input = readLine()!.split(separator: " ").map { Int($0)! }
+let (n, k) = (input[0], input[1])
 let kArr = readLine()!.split(separator: " ").map { Int($0)! }
-var nLen = nArr.count
-
-func permuteWithRepetition(_ elements: [Int], length: Int) -> [[Int]] {
-    if length == 1 {
-        return elements.map { [$0] }
-    }
-
-    var result = [[Int]]()
-    let subPermutations = permuteWithRepetition(elements, length: length - 1)
-    
-    for element in elements {
-        for permutation in subPermutations {
-            result.append([element] + permutation)
-        }
+func dfs(currentNumber: String, digits: [String], maxNumber: Int) -> Int {
+    // 현재까지 만든 숫자가 maxNumber를 넘으면 중단
+    if Int(currentNumber)! > maxNumber {
+        return 0
     }
     
-    return result
+    var maxResult = Int(currentNumber)!
+    
+    for digit in digits {
+        let newNumber = currentNumber + digit
+        let result = dfs(currentNumber: newNumber, digits: digits, maxNumber: maxNumber)
+        maxResult = max(maxResult, result)
+    }
+    
+    return maxResult
 }
 
-while true {
-    let arr = permuteWithRepetition(kArr, length: nLen)
-    var result = [Int]()
-    for i in arr {
-        let num = Int(i.map{String($0)}.joined(separator: ""))!
-        if num <= n {
-            result.append(num)
-        }
+func findLargestNumber(N: Int, K: [Int]) -> Int {
+    let digits = K.map { String($0) }
+    let maxNumber = N
+    var maxResult = 0
+    
+
+    for digit in digits {
+        maxResult = max(maxResult, dfs(currentNumber: digit, digits: digits, maxNumber: maxNumber))
     }
-    if !result.isEmpty {
-        print(result.max()!)
-        break
-    }
-    nLen -= 1
+    
+    return maxResult
 }
+
+
+print(findLargestNumber(N: n, K: kArr))
