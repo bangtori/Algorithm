@@ -2,7 +2,7 @@ let lengths = readLine()!.split(separator: " ").map{ Int($0)! }
 let (n, m) = (lengths[0], lengths[1])
 var graph = [[Int]]()
 
-for i in 1...n {
+for _ in 1...n {
     let line = Array(readLine()!).map{Int(String($0))!}
     graph.append(line)
 }
@@ -25,7 +25,7 @@ while queue.count > index {
         let nx = dx[i] + node.0
         let ny = dy[i] + node.1
         if 0..<m ~= nx && 0..<n ~= ny && graph[ny][nx] == 1 {
-            graph[ny][nx] = max(graph[node.1][node.0] + 1, graph[ny][nx])
+            graph[ny][nx] = graph[node.1][node.0] + 1
             queue.append((nx, ny))
         }
     }
