@@ -10,6 +10,7 @@ var count = 0
 let moves = [(1,0),(-1,0),(0,1),(0,-1)]
 
 func bfs(_ start: (x:Int, y:Int), visited: inout [[Bool]]) -> [(Int, Int)] {
+    // 현재 지점에서 방문할 수 있는(국경을 넘어갈 수 있는) 연결된 노드 찾고 해당 노드들의 값을 평균값으로 변환한 뒤 해당 노드들의 리스트를 반환하는 함수
     var queue: [(x:Int, y:Int)] = [start]
     var index = 0
     visited[start.y][start.x] = true
@@ -29,21 +30,14 @@ func bfs(_ start: (x:Int, y:Int), visited: inout [[Bool]]) -> [(Int, Int)] {
         }
     }
 
-    let (result, list) = openBorder(queue)
-    list.forEach { (x, y) in
+    let result = Int(queue.reduce(0) { $0 + map[$1.y][$1.x] } / queue.count)
+    queue.forEach { (x, y) in
         map[y][x] = result
     }
-    return list
+    return queue
 }
 
-func openBorder(_ list: [(Int, Int)]) -> (Int, [(x:Int, y:Int)]) {
-    var sum = 0
-    for (x, y) in list {
-        sum += map[y][x]
-    }
-    let result = Int(sum / list.count)
-    return (result, list)
-}
+
 
 func oneTurnOpen() -> Bool {
     var visited = [[Bool]](repeating: [Bool](repeating: false, count: n), count: n)
